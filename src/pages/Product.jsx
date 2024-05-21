@@ -1,21 +1,18 @@
-import { useState } from "react"; // Import useState hook
+import { useState } from "react"; 
 import { useGetPostsQuery } from "../redux/api/api";
-import { FiMapPin, FiDollarSign, FiPhone } from "react-icons/fi"; // Importing additional icons from react-icons
+import { FiMapPin, FiDollarSign } from "react-icons/fi"; 
 import Layout from "../layout/Layout";
+import { Link } from "react-router-dom"; 
 
 const Product = () => {
-  // Fetching product data
   const { isLoading, isSuccess, data } = useGetPostsQuery("");
-  const [searchQuery, setSearchQuery] = useState(""); // State for search query
-
-  // Loading state
+  const [searchQuery, setSearchQuery] = useState(""); 
+  console.log(data)
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  // Success state
   if (isSuccess) {
-    // Filtered products based on search query
     const filteredProducts = data.products.filter(
       (product) =>
         product.collageName.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -28,7 +25,6 @@ const Product = () => {
           <div className="container mx-auto px-4">
             <div className="flex justify-between">
               <h1 className="text-2xl lg:text-3xl font-bold mb-8">Products</h1>
-              {/* Search box */}
               <input
                 type="text"
                 placeholder="college name or city"
@@ -37,21 +33,19 @@ const Product = () => {
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
-            <div className=" w-full grid grid-cols-1  gap-8">
-              {" "}
-              {/* Increased gap */}
+            <div className="w-full grid grid-cols-1 gap-8">
               {filteredProducts.map((product) => (
-                <div className="flex flex-wrap justify-center items-center mb-4 w-full">
+                <div key={product.id} className="flex flex-wrap justify-center items-center mb-4 w-full">
                   {product.sellers.map((seller, sellerIndex) => (
-                    <div
-                      key={sellerIndex}
+                    <Link
+                      key={`${product.id}-${sellerIndex}`} 
+                      to={`/singleproduct/${product._id}/${seller._id}`} 
                       className="mb-2 m-4 gap-10 border-2 border-blue-950 p-2 rounded-lg"
                     >
                       <img
-                        key={sellerIndex}
-                        src={seller.avatar[0]} // Assuming seller avatar is an array
+                        src={seller.avatar[0]} 
                         alt={`Seller ${sellerIndex + 1} Avatar`}
-                        className="w-56 h-32 object-cover rounded-lg shadow-md " // Adjusted width here
+                        className="w-56 h-32 object-cover rounded-lg shadow-md" 
                       />
                       <div className="flex justify-between px-5 py-3 items-center">
                         <div className="flex items-center">
@@ -63,8 +57,7 @@ const Product = () => {
                           <p className="font-semibold">{seller.price}</p>
                         </div>
                       </div>
-                      {/* Add icons */}
-                    </div>
+                    </Link>
                   ))}
                 </div>
               ))}

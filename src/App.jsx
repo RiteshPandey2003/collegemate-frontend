@@ -15,7 +15,8 @@ const Home = lazy(() => import("./pages/Home"));
 const Product = lazy(() => import("./pages/Product"));
 const Login = lazy(() => import("./pages/Login"));
 const NotFound = lazy(() => import("./pages/NotFound"));
-const ProfilePage = lazy(()=>import("./pages/Profile"))
+const ProfilePage = lazy(()=>import("./pages/Profile"));
+import SingleProduct from "./pages/SingleProduct";
 
 const App = () => {
   const { user, loader } = useSelector((state) => state.auth);
@@ -41,7 +42,7 @@ const App = () => {
       <Suspense fallback={<LayoutLoader />}>
         <Routes>
           <Route path="/" element={<Product />} />
-
+          <Route path="/singleproduct/:productId/:userId" element={<SingleProduct />} />
           <Route element={<ProtectRoute user={user} />}>
             <Route path="/register-product" element={<Home />} />
           </Route>
